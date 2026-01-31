@@ -266,12 +266,7 @@
         const personName = urlParams.get('name') || 'Beautiful';
         nameDisplay.textContent = personName;
         
-        // Your webhook URL - REPLACE THIS WITH YOUR ACTUAL WEBHOOK
-        // You can get a free webhook from services like:
-        // - webhook.site (temporary)
-        // - Discord webhooks
-        // - Telegram bot
-        // - Email services like Formspree
+        // Discord webhook URL - configured and ready!
         const WEBHOOK_URL = 'https://discord.com/api/webhooks/1467236610721710182/J7Q_bElo7c-i5kCMH5v7BuWCwygtquamjh-ca2DyiAMsYiuwxx8dzUrsn-Jhu0KW8uoA';
         
         // Function to send notification
@@ -286,16 +281,43 @@
             };
             
             try {
-                // Uncomment when you add your webhook URL
+                // Send notification to Discord
                 await fetch(WEBHOOK_URL, {
-                     method: 'POST',
-                     headers: {
-                         'Content-Type': 'application/json',
-                     },
-                     body: JSON.stringify(data)
-                 });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        content: data.message,
+                        embeds: [{
+                            title: choice === 'yes' ? '💕 SHE SAID YES!' : '❌ No Attempt',
+                            description: data.message,
+                            color: choice === 'yes' ? 15418782 : 15844367,
+                            fields: [
+                                {
+                                    name: 'Name',
+                                    value: personName,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Choice',
+                                    value: choice,
+                                    inline: true
+                                },
+                                {
+                                    name: 'Time',
+                                    value: new Date().toLocaleString(),
+                                    inline: false
+                                }
+                            ],
+                            footer: {
+                                text: '💝 Valentine Tracker'
+                            }
+                        }]
+                    })
+                });
                 
-                console.log('Notification sent:', data);
+                console.log('Notification sent successfully:', data);
             } catch (error) {
                 console.error('Error sending notification:', error);
             }
